@@ -40,9 +40,9 @@ import java.util.*
 
 object ChunkPacketUtil {
 
-    fun readChunkPacket(buffer: PlayInByteBuffer, dimension: DimensionProperties, sectionBitMask: BitSet, addBitMask: BitSet? = null, complete: Boolean, containsSkyLight: Boolean): ChunkData? {
+    fun readChunkPacket(buffer: PlayInByteBuffer, dimension: DimensionProperties, sectionBitMask: BitSet, addBitMask: BitSet? = null, complete: Boolean, containsSkyLight: Boolean, emptyChunkIsUnload: Boolean = true): ChunkData? {
         if (buffer.versionId < V_15W35A) { // ToDo: was this really changed in 62?
-            return readLegacyChunk(buffer, dimension, sectionBitMask, addBitMask, complete, containsSkyLight)
+            return readLegacyChunk(buffer, dimension, sectionBitMask, addBitMask, complete, containsSkyLight, emptyChunkIsUnload)
         }
         return readPaletteChunk(buffer, dimension, sectionBitMask, complete, containsSkyLight)
     }
@@ -106,8 +106,8 @@ object ChunkPacketUtil {
         return chunkData
     }
 
-    fun readLegacyChunk(buffer: PlayInByteBuffer, dimension: DimensionProperties, sectionBitMask: BitSet, addBitMask: BitSet? = null, isFullChunk: Boolean, containsSkyLight: Boolean = false): ChunkData? {
-        if (sectionBitMask.length() == 0 && isFullChunk) {
+    fun readLegacyChunk(buffer: PlayInByteBuffer, dimension: DimensionProperties, sectionBitMask: BitSet, addBitMask: BitSet? = null, isFullChunk: Boolean, containsSkyLight: Boolean = false, emptyChunkIsUnload: Boolean = true): ChunkData? {
+        if (sectionBitMask.length() == 0 && isFullChunk && emptyChunkIsUnload) {
             // unload chunk
             return null
         }

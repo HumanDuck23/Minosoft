@@ -58,7 +58,7 @@ class ChunksS2CP : PlayS2CPacket {
             bitSets[buffer.readChunkPosition()] = buffer.readLegacyBitSet(2)
         }
         for ((chunkPosition, sectionBitMask) in bitSets) {
-            chunks[chunkPosition] = ChunkPacketUtil.readChunkPacket(buffer, dimension, sectionBitMask, null, true, skylight)
+            chunks[chunkPosition] = ChunkPacketUtil.readChunkPacket(buffer, dimension, sectionBitMask, null, true, skylight, false)
         }
     }
 
