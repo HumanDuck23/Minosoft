@@ -72,6 +72,7 @@ import de.bixilon.minosoft.util.KUtil.startInit
 import de.bixilon.minosoft.util.logging.Log
 import de.bixilon.minosoft.util.logging.LogLevels
 import de.bixilon.minosoft.util.logging.LogMessageType
+import dev.spaghett.neatsumo.client.TrainerConnection
 import java.util.concurrent.atomic.AtomicInteger
 
 
@@ -179,6 +180,17 @@ class PlaySession(
             }
             Log.log(LogMessageType.CHAT_IN, level = if (it.message.type.position == ChatTextPositions.HOTBAR) LogLevels.VERBOSE else LogLevels.INFO, prefix = ChatComponent.of(additionalPrefix)) { it.message.text }
         }
+
+        var hasRegisteredOnTrainer = false
+        this::state.observe(this) {
+            if (it == PlaySessionStates.PLAYING && !hasRegisteredOnTrainer) {
+                hasRegisteredOnTrainer = true
+
+                val t = TrainerConnection(account.uuid)
+                t.connect()
+            }
+        }
+
         if (CLI.session == null) {
             CLI.session = this
         }
