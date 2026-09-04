@@ -61,6 +61,8 @@ enum class LogMessageType(
         LogLevels.WARN to ChatColors.RED,
         LogLevels.VERBOSE to ChatColors.YELLOW,
     )),
+
+    NEAT(ChatColors.GOLD),
     ;
 
     companion object : ValuesEnum<LogMessageType> {
