@@ -186,7 +186,7 @@ class PlaySession(
             if (it == PlaySessionStates.PLAYING && !hasRegisteredOnTrainer) {
                 hasRegisteredOnTrainer = true
 
-                val t = TrainerConnection(account.username, account.uuid)
+                val t = TrainerConnection(this)
                 t.connect()
             }
         }

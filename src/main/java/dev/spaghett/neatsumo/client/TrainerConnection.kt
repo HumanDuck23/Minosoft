@@ -14,6 +14,7 @@
 package dev.spaghett.neatsumo.client
 
 import de.bixilon.minosoft.data.text.ChatComponent
+import de.bixilon.minosoft.protocol.network.session.play.PlaySession
 import de.bixilon.minosoft.util.logging.Log
 import de.bixilon.minosoft.util.logging.LogLevels
 import de.bixilon.minosoft.util.logging.LogMessageType
@@ -24,11 +25,9 @@ import dev.spaghett.neatsumo.protocol.message.RegisterClient
 import dev.spaghett.neatsumo.protocol.message.StartControl
 import dev.spaghett.neatsumo.protocol.message.StopControl
 import dev.spaghett.neatsumo.protocol.socket.SocketClient
-import java.util.UUID
 
 class TrainerConnection(
-    private val name: String,
-    private val uuid: UUID,
+    private val session: PlaySession,
 ) {
 
     private val socket = SocketClient("127.0.0.1", 7654)
@@ -56,10 +55,10 @@ class TrainerConnection(
     }
 
     fun connect() {
-        Log.log(LogMessageType.NEAT, level = LogLevels.INFO, prefix = ChatComponent.of("[$name] ")) { "Registering on trainer as $uuid..." }
+        Log.log(LogMessageType.NEAT, level = LogLevels.INFO, prefix = ChatComponent.of("[${session.account.username}] ")) { "Registering on trainer as ${session.account.uuid}..." }
         socket.send(
             RegisterClient(
-                uuid = uuid
+                uuid = session.account.uuid
             )
         )
     }
