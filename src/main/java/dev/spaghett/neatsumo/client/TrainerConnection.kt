@@ -17,7 +17,9 @@ import de.bixilon.minosoft.data.text.ChatComponent
 import de.bixilon.minosoft.util.logging.Log
 import de.bixilon.minosoft.util.logging.LogLevels
 import de.bixilon.minosoft.util.logging.LogMessageType
+import dev.spaghett.neat.network.NetworkData
 import dev.spaghett.neatsumo.protocol.message.LoadNetwork
+import dev.spaghett.neatsumo.protocol.message.NetworkLoaded
 import dev.spaghett.neatsumo.protocol.message.RegisterClient
 import dev.spaghett.neatsumo.protocol.message.StartControl
 import dev.spaghett.neatsumo.protocol.message.StopControl
@@ -31,11 +33,16 @@ class TrainerConnection(
 
     private val socket = SocketClient("127.0.0.1", 7654)
 
+    private var networkData: NetworkData? = null
+
     init {
         socket.startReading { message ->
             when (message) {
                 is LoadNetwork -> {
-                    // TODO
+                    // TODO: Stop existing control
+
+                    networkData = message.networkData
+                    socket.send(NetworkLoaded)
                 }
                 is StartControl -> {
                     // TODO
