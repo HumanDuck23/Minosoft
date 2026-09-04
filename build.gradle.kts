@@ -79,6 +79,7 @@ logger.info("Building for ${os.name.lowercase()}, ${architecture.name.lowercase(
 
 repositories {
     mavenCentral()
+    mavenLocal()
 }
 
 buildscript {
@@ -438,6 +439,9 @@ dependencies {
     javafx("graphics")
     javafx("controls")
     javafx("fxml")
+
+    // sumo NEAT
+    implementation("dev.spaghett:neat-sumo-protocol:1.0-SNAPSHOT")
 }
 
 tasks.test {
@@ -564,6 +568,10 @@ tasks.withType<JavaCompile> {
 
 application {
     mainClass.set("de.bixilon.minosoft.Minosoft")
+}
+
+tasks.named<JavaExec>("run") {
+    standardInput = System.`in`
 }
 
 var destination: File? = null
