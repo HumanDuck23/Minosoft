@@ -442,6 +442,7 @@ dependencies {
 
     // sumo NEAT
     implementation("dev.spaghett:neat-sumo-protocol:1.0-SNAPSHOT")
+    implementation("dev.spaghett:neat-kt:1.0-SNAPSHOT")
 }
 
 tasks.test {
