@@ -24,7 +24,7 @@ object Commands {
         AccountManageCommand,
         ReloadCommand,
 
-        PingCommand, ConnectCommand,
+        PingCommand, ConnectCommand, ConnectBotsCommand,
 
         CrashCommand, DumpCommand,
 
