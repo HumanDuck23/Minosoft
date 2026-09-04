@@ -55,6 +55,9 @@ class LocalPlayerEntity(
     override val equipment: EntityEquipment = EntityEquipment(this, items.inventory.equipment)
 
     var input = PlayerMovementInput()
+
+    /** Does not get overwritten every tick. Values are ||ed with those in [input] */
+    var botInput = PlayerMovementInput()
     var inputActions = MovementInputActions()
 
     override val clientControlled get() = true

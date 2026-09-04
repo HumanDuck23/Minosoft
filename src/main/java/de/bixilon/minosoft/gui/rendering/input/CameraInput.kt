@@ -87,16 +87,17 @@ class CameraInput(
     }
 
     fun updateInput(delta: Duration) {
+        val bot = session.player.botInput
         val input = PlayerMovementInput(
-            forward = MOVE_FORWARDS_KEYBINDING in context.input.bindings,
-            backward = MOVE_BACKWARDS_KEYBINDING in context.input.bindings,
-            left = MOVE_LEFT_KEYBINDING in context.input.bindings,
-            right = MOVE_RIGHT_KEYBINDING in context.input.bindings,
-            jump = JUMP_KEYBINDING in context.input.bindings,
-            sneak = SNEAK_KEYBINDING in context.input.bindings,
-            sprint = MOVE_SPRINT_KEYBINDING in context.input.bindings,
-            flyDown = FLY_DOWN_KEYBINDING in context.input.bindings,
-            flyUp = FLY_UP_KEYBINDING in context.input.bindings,
+            forward = MOVE_FORWARDS_KEYBINDING in context.input.bindings || bot.forward,
+            backward = MOVE_BACKWARDS_KEYBINDING in context.input.bindings || bot.backward,
+            left = MOVE_LEFT_KEYBINDING in context.input.bindings || bot.left,
+            right = MOVE_RIGHT_KEYBINDING in context.input.bindings || bot.right,
+            jump = JUMP_KEYBINDING in context.input.bindings || bot.jump,
+            sneak = SNEAK_KEYBINDING in context.input.bindings || bot.sneak,
+            sprint = MOVE_SPRINT_KEYBINDING in context.input.bindings || bot.sprint,
+            flyDown = FLY_DOWN_KEYBINDING in context.input.bindings || bot.flyDown,
+            flyUp = FLY_UP_KEYBINDING in context.input.bindings || bot.flyUp,
         )
 
         val changeFly = CHANGE_FLY_KEYBINDING in context.input.bindings
