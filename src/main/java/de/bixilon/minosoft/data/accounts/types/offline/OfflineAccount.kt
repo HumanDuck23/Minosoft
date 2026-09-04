@@ -23,11 +23,12 @@ import de.bixilon.minosoft.data.accounts.AccountStates
 import de.bixilon.minosoft.data.entities.entities.player.properties.PlayerProperties
 import de.bixilon.minosoft.data.registries.identified.Identified
 import de.bixilon.minosoft.data.registries.identified.Namespaces.minosoft
+import java.nio.charset.StandardCharsets
 import java.util.*
 
 class OfflineAccount(username: String, @JacksonInject storage: ProfileStorage?) : Account(username, storage) {
     override val id: String = username
-    override val uuid: UUID = UUID("OfflinePlayer:$username".hashCode().toLong(), 0L) // ToDo
+    override val uuid: UUID = UUID.nameUUIDFromBytes("OfflinePlayer:$username".toByteArray(StandardCharsets.UTF_8)) //UUID("OfflinePlayer:$username".hashCode().toLong(), 0L) // ToDo
     override val type = identifier
     override var state: AccountStates
         get() = AccountStates.WORKING
