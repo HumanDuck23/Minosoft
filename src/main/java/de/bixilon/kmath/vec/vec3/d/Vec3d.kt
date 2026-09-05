@@ -23,6 +23,7 @@ import de.bixilon.kmath.vec.vec3.f._Vec3f
 import de.bixilon.kmath.vec.vec3.i._Vec3i
 import de.bixilon.kutil.primitive.d
 import de.bixilon.minosoft.data.Axes
+import kotlin.math.atan2
 import kotlin.math.sqrt
 
 
@@ -113,6 +114,19 @@ value class Vec3d(
         Axes.X -> x
         Axes.Y -> y
         Axes.Z -> z
+    }
+
+    fun angle(other: Vec3d): Double {
+        val dot = this.x * other.x + this.z * other.z
+        val cross = this.x * other.z - z * other.x
+
+        return atan2(cross, dot)
+    }
+
+    fun horizontalDistanceTo(other: Vec3d): Double {
+        val dx = this.x - other.x
+        val dz = this.z - other.z
+        return dx * dx + dz * dz
     }
 
     companion object {
