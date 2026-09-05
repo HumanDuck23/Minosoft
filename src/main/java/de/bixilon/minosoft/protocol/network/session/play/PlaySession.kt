@@ -81,6 +81,7 @@ class PlaySession(
     val account: Account,
     override val version: Version,
     val profiles: SelectedProfiles = SelectedProfiles(),
+    val headless: Boolean = false,
 ) : Session() {
     val sessionId = KUtil.secureRandomUUID()
     val settingsManager = ClientSettingsManager(this)
@@ -245,7 +246,7 @@ class PlaySession(
             camera.init()
 
 
-            if (RenderingOptions.disabled) {
+            if (RenderingOptions.disabled || headless) {
                 establish(latch)
             } else {
                 establishRendering(latch)

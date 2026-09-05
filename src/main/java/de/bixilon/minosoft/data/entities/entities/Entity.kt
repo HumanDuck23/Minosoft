@@ -269,7 +269,7 @@ abstract class Entity(
         PHYSICS[this] = createPhysics()
         forceTeleport(initialPosition)
         forceRotate(initialRotation)
-        if (!RenderingOptions.disabled) {
+        if (!RenderingOptions.disabled && !session.headless) {
             RENDER_INFO[this] = EntityRenderInfo(this)
         }
         initialied = true

@@ -75,10 +75,12 @@ class TargetHandler(
         world.entities.lock.acquire()
         for (entity in world.entities) {
             if (!entity.canRaycast) continue
-            if (Vec3dUtil.distance2(entity.renderInfo.position, origin) > MAX_ENTITY_DISTANCE) {
+            val renderInfo = entity.renderInfo // unsafeNull, not present without a render window
+            val position = if (renderInfo != null) renderInfo.position else entity.physics.position
+            if (Vec3dUtil.distance2(position, origin) > MAX_ENTITY_DISTANCE) {
                 continue
             }
-            val aabb = entity.renderInfo.cameraAABB ?: continue
+            val aabb = (if (renderInfo != null) renderInfo.cameraAABB else entity.physics.aabb) ?: continue
             val (distance, direction) = aabb.raycast(origin, front) ?: continue
 
             if (distance > maxDistance) continue // other target is already closer

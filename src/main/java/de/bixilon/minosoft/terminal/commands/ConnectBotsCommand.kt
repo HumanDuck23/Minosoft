@@ -50,7 +50,7 @@ object ConnectBotsCommand : Command {
             val name = "Bot$i"
             val account = profile.entries[name] as? OfflineAccount ?: OfflineAccount(name, profile.storage).also { profile.entries[it.id] = it }
             print.print("Connecting §e$name§r to $address")
-            PlaySession(NetworkConnection(address, true), account, version).connect()
+            PlaySession(NetworkConnection(address, true), account, version, headless = true).connect()
         }
     }
 }
