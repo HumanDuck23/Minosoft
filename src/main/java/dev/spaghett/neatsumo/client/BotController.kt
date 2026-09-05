@@ -37,7 +37,7 @@ class BotController(
         4 to Pair(inputController::startSneak, inputController::stopSneak),
         5 to Pair(inputController::startSprint, inputController::stopSprint),
         6 to Pair(inputController::startJump, inputController::stopJump),
-//        7 to Pair(inputController::startAttack, inputController::stopAttack),
+        7 to Pair(inputController::startAttack, inputController::stopAttack),
     )
 
     fun tick() {
@@ -69,6 +69,8 @@ class BotController(
         } catch (e: InputExtractor.NoAABBException) {
             // e.printStackTrace()
         }
+
+        inputController.tick()
     }
 
     fun applyOutputs(outputs: List<Double>) {

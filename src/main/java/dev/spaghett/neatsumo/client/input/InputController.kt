@@ -14,10 +14,15 @@
 package dev.spaghett.neatsumo.client.input
 
 import de.bixilon.minosoft.data.entities.entities.player.local.LocalPlayerEntity
+import de.bixilon.minosoft.protocol.network.session.play.PlaySession
 
 class InputController(
-    private val player: LocalPlayerEntity
+    private val session: PlaySession
 ) {
+
+    private val player = session.player
+    private var attacking = false
+    private var ticksSinceAttack = 0
 
     fun startForward() {
         player.botInput = player.botInput.copy(forward = true)
@@ -45,6 +50,14 @@ class InputController(
 
     fun startJump() {
         player.botInput = player.botInput.copy(jump = true)
+    }
+
+    fun startAttack() {
+        if (!attacking) {
+            attacking = true
+            ticksSinceAttack = 0
+            performAttack()
+        }
     }
 
     fun stopForward() {
@@ -75,6 +88,11 @@ class InputController(
         player.botInput = player.botInput.copy(jump = false)
     }
 
+    fun stopAttack() {
+        attacking = false
+        ticksSinceAttack = 0
+    }
+
     fun addYaw(d: Float) {
         val rotation = player.physics.rotation
         player.physics.forceSetRotation(rotation.copy(yaw = rotation.yaw + d))
@@ -93,6 +111,29 @@ class InputController(
         stopSneak()
         stopSprint()
         stopJump()
+        stopAttack()
     }
 
+    fun tick() {
+        if (!attacking) {
+            ticksSinceAttack = 0
+            return
+        }
+
+        ticksSinceAttack++
+
+        val attackIntervalTicks = 2
+
+        if (ticksSinceAttack >= attackIntervalTicks) {
+            ticksSinceAttack = 0
+            performAttack()
+        }
+    }
+
+    private fun performAttack() {
+        val cam = session.camera
+        cam.target.update()
+        cam.interactions.tryAttack(true)
+        cam.interactions.tryAttack(false)
+    }
 }

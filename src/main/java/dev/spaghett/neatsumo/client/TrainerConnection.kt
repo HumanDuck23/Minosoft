@@ -69,7 +69,7 @@ class TrainerConnection(
                     botController = BotController(
                         networkData = nd,
                         inputExtractor = InputExtractor(session, arenaCenter, message.opponent),
-                        inputController = InputController(session.player)
+                        inputController = InputController(session)
                     )
                 }
                 is StopControl -> {
