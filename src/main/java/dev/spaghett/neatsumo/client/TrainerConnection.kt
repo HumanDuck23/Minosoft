@@ -13,12 +13,15 @@
 
 package dev.spaghett.neatsumo.client
 
+import de.bixilon.kmath.vec.vec3.d.Vec3d
 import de.bixilon.minosoft.data.text.ChatComponent
 import de.bixilon.minosoft.protocol.network.session.play.PlaySession
 import de.bixilon.minosoft.util.logging.Log
 import de.bixilon.minosoft.util.logging.LogLevels
 import de.bixilon.minosoft.util.logging.LogMessageType
 import dev.spaghett.neat.network.NetworkData
+import dev.spaghett.neatsumo.client.input.InputController
+import dev.spaghett.neatsumo.client.input.InputExtractor
 import dev.spaghett.neatsumo.protocol.message.LoadNetwork
 import dev.spaghett.neatsumo.protocol.message.NetworkLoaded
 import dev.spaghett.neatsumo.protocol.message.RegisterClient
@@ -32,22 +35,45 @@ class TrainerConnection(
 
     private val socket = SocketClient("127.0.0.1", 7654)
 
+    private var botController: BotController? = null
     private var networkData: NetworkData? = null
 
     init {
         socket.startReading { message ->
             when (message) {
                 is LoadNetwork -> {
-                    // TODO: Stop existing control
+                    if (botController != null) {
+                        botController?.stop()
+                        botController = null
+                    }
 
                     networkData = message.networkData
                     socket.send(NetworkLoaded)
                 }
                 is StartControl -> {
-                    // TODO
+                    botController?.stop()
+                    botController = null
+
+                    val nd = requireNotNull(networkData) {
+                        "Received StartControl without prior LoadNetwork!"
+                    }
+
+                    val arenaCenter = Vec3d(
+                        message.arenaCenterX,
+                        message.arenaCenterY,
+                        message.arenaCenterZ
+                    )
+
+                    stopControl()
+
+                    botController = BotController(
+                        networkData = nd,
+                        inputExtractor = InputExtractor(session, arenaCenter, message.opponent),
+                        inputController = InputController(session.player)
+                    )
                 }
                 is StopControl -> {
-                    // TODO
+                    stopControl()
                 }
                 else -> {}
             }
@@ -63,4 +89,13 @@ class TrainerConnection(
         )
     }
 
+    fun tick() {
+        botController?.tick()
+    }
+
+    private fun stopControl() {
+        botController?.stop()
+        botController = null
+        networkData = null
+    }
 }

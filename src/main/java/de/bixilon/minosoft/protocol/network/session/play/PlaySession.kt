@@ -188,6 +188,10 @@ class PlaySession(
 
                 val t = TrainerConnection(this)
                 t.connect()
+
+                ticker += {
+                    t.tick()
+                }
             }
         }
 
