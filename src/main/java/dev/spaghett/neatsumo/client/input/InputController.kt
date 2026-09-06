@@ -115,6 +115,17 @@ class InputController(
     }
 
     fun tick() {
+        val bot = player.botInput
+        player.input = player.input.copy(
+            forward = bot.forward,
+            backward = bot.backward,
+            left = bot.left,
+            right = bot.right,
+            jump = bot.jump,
+            sneak = bot.sneak,
+            sprint = bot.sprint,
+        )
+
         if (!attacking) {
             ticksSinceAttack = 0
             return
