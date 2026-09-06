@@ -112,19 +112,11 @@ class InputController(
         stopSprint()
         stopJump()
         stopAttack()
+        syncInput()
     }
 
     fun tick() {
-        val bot = player.botInput
-        player.input = player.input.copy(
-            forward = bot.forward,
-            backward = bot.backward,
-            left = bot.left,
-            right = bot.right,
-            jump = bot.jump,
-            sneak = bot.sneak,
-            sprint = bot.sprint,
-        )
+        syncInput()
 
         if (!attacking) {
             ticksSinceAttack = 0
@@ -146,5 +138,18 @@ class InputController(
         cam.target.update()
         cam.interactions.tryAttack(true)
         cam.interactions.tryAttack(false)
+    }
+
+    private fun syncInput() {
+        val bot = player.botInput
+        player.input = player.input.copy(
+            forward = bot.forward,
+            backward = bot.backward,
+            left = bot.left,
+            right = bot.right,
+            jump = bot.jump,
+            sneak = bot.sneak,
+            sprint = bot.sprint,
+        )
     }
 }
