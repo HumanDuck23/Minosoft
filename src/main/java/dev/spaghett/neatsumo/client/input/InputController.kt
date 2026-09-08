@@ -117,6 +117,7 @@ class InputController(
 
     fun tick() {
         syncInput()
+        session.camera.interactions.attack.tick()
 
         if (!attacking) {
             ticksSinceAttack = 0
